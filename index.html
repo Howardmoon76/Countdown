@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Countdown Hub</title>
+
+<style>
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a1c4fd, #c2ffd8);
+min-height: 100vh;
+color: #222;
+}
+
+header {
+text-align: center;
+padding: 35px 15px 20px;
+}
+
+header h1 {
+font-size: 2.4rem;
+margin: 0;
+}
+
+header p {
+font-size: 1rem;
+margin-top: 8px;
+}
+
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+gap: 20px;
+padding: 25px;
+max-width: 1200px;
+margin: auto;
+}
+
+.card {
+background: white;
+border-radius: 24px;
+padding: 22px;
+text-align: center;
+box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+border: 4px solid rgba(255,255,255,0.6);
+}
+
+.icon {
+font-size: 3rem;
+margin-bottom: 10px;
+}
+
+.card h2 {
+margin: 8px 0;
+font-size: 1.3rem;
+}
+
+.date {
+font-size: 0.9rem;
+opacity: 0.75;
+margin-bottom: 15px;
+}
+
+.countdown {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 8px;
+}
+
+.time-box {
+background: #f4f4f4;
+border-radius: 14px;
+padding: 10px 4px;
+}
+
+.num {
+font-size: 1.3rem;
+font-weight: bold;
+}
+
+.label {
+font-size: 0.7rem;
+text-transform: uppercase;
+}
+
+.done {
+font-weight: bold;
+font-size: 1.1rem;
+color: #ff4b7d;
+margin-top: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🎉 The Ward Countdown Hub 🎉</h1>
+<p>All the big things we’re counting down to!</p>
+</header>
+
+<div class="grid" id="countdownGrid"></div>
+
+<script>
+const events = [
+{
+title: "Jessie's Birthday",
+date: "2026-05-09T12:00:00",
+icon: "🎂"
+},
+{
+title: "MK Thunder New Jersey Reveal",
+date: "2026-05-10T18:00:00",
+icon: "🏒"
+},
+{
+title: "Gran Canaria Holiday",
+date: "2026-08-01T09:00:00",
+icon: "☀️"
+},
+{
+title: "MK Thunder First Home Game",
+date: "2026-09-12T18:30:00",
+icon: "🥅"
+},
+{
+title: "Christmas",
+date: "2026-12-25T00:00:00",
+icon: "🎄"
+},
+{
+title: "Event Six",
+date: "2026-10-01T12:00:00",
+icon: "⭐"
+},
+{
+title: "Event Seven",
+date: "2026-11-01T12:00:00",
+icon: "🎁"
+},
+{
+title: "Event Eight",
+date: "2027-01-01T00:00:00",
+icon: "🎆"
+},
+{
+title: "Event Nine",
+date: "2027-02-01T12:00:00",
+icon: "💫"
+}
+];
+
+function updateCountdowns() {
+const grid = document.getElementById("countdownGrid");
+grid.innerHTML = "";
+
+events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+events.forEach(event => {
+const now = new Date();
+const target = new Date(event.date);
+const diff = target - now;
+
+let content = "";
+
+if (diff <= 0) {
+content = `<div class="done">It's here! 🎉</div>`;
+} else {
+const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+const minutes = Math.floor((diff / (1000 * 60)) % 60);
+const seconds = Math.floor((diff / 1000) % 60);
+
+content = `
+<div class="countdown">
+<div class="time-box"><div class="num">${days}</div><div class="label">Days</div></div>
+<div class="time-box"><div class="num">${hours}</div><div class="label">Hrs</div></div>
+<div class="time-box"><div class="num">${minutes}</div><div class="label">Mins</div></div>
+<div class="time-box"><div class="num">${seconds}</div><div class="label">Secs</div></div>
+</div>
+`;
+}
+
+grid.innerHTML += `
+<div class="card">
+<div class="icon">${event.icon}</div>
+<h2>${event.title}</h2>
+<div class="date">${target.toLocaleDateString("en-GB", {
+weekday: "short",
+day: "numeric",
+month: "long",
+year: "numeric",
+hour: "2-digit",
+minute: "2-digit"
+})}</div>
+${content}
+</div>
+`;
+});
+}
+
+updateCountdowns();
+setInterval(updateCountdowns, 1000);
+</script>
+
+</body>
+</html>
+
